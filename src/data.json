@@ -1,0 +1,19 @@
+{
+    "TodoList":[
+        {
+            "title":"get a dog",
+            "date":"15/07/2021",
+            "flag":false 
+        },
+        {
+            "title":"get a cat",
+            "date":"28/02/2022",
+            "flag":false 
+        },
+        {
+            "title":"get a mouse",
+            "date":"23/11/2020",
+            "flag":false 
+        }
+    ]
+}
