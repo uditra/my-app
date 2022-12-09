@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import {fetchTodoList} from '../redux/TodoListActions'
+import InputTodo from "./inputTodo";
 
 const TodoListContainer = () => {
 
@@ -24,6 +24,7 @@ const TodoListContainer = () => {
                 TodoListData &&
                 TodoListData.TodoList.map(todo => <p>{todo.title}</p>)}
             </div>
+            <InputTodo/>
         </div>
     )
 }
