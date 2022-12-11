@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {fetchTodoList} from '../redux/TodoListActions'
+import {fetchTodoList , addTodoItems} from '../redux/TodoListActions'
 import InputTodo from "./inputTodo";
 
 const TodoListContainer = () => {
@@ -12,6 +12,10 @@ const TodoListContainer = () => {
         dispatch(fetchTodoList())
     },[])
 
+    const addTodoItem = (todoItem) => {
+        dispatch(addTodoItems(todoItem))
+    }
+
     return TodoListData.loading ? (
         <h1>loading data</h1>
     ) : TodoListData.error ? (
@@ -22,9 +26,9 @@ const TodoListContainer = () => {
             <div>
                 {TodoListData && 
                 TodoListData &&
-                TodoListData.TodoList.map(todo => <p>{todo.title}</p>)}
+                TodoListData.TodoList.map(todo => <div key={todo.id}><p>{todo.title}</p></div>)}
             </div>
-            <InputTodo/>
+            <InputTodo addTodo={addTodoItem}/>
         </div>
     )
 }

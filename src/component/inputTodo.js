@@ -1,17 +1,18 @@
 import React, {useState} from "react";
 
-const InputTodo = addTodo => {
+import { v4 as uuidv4 } from 'uuid';
 
 
-    const [todo,setTodo] =useState({title: "",date:"",flag:false})
+const InputTodo = ({addTodo}) => {
+
+
+    const [todo,setTodo] =useState({title: "",date:"",flag:false,id:uuidv4()})
 
     const handleSubmit = e => {
         e.preventDefault()
-        console.log(todo)
         if (!todo.title || !todo.date) return
-        console.log(todo)
         addTodo(todo)
-        setTodo({...todo, title: "",date:""})
+        setTodo({...todo, title: "",date:"",id:uuidv4()})
     }
 
     return (

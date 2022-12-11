@@ -3,6 +3,11 @@ import {
     FETCH_TODOLIST_SUCCESS,
     FETCH_TODOLIST_FAILURE
 } from "./TodoListType"
+import {
+    ADD_TODOITEM_REQUEST,
+    ADD_TODOITEM_SUCCESS,
+    ADD_TODOITEM_FAILURE
+} from "./TodoListType"
 
 const initialState = {
     loading: false,
@@ -27,6 +32,23 @@ const reducer = (state = initialState, action) => {
             return{
                 loading: false,
                 TodoList: [],
+                error: action.payload
+            }
+        case ADD_TODOITEM_REQUEST:
+            return{
+                ...state
+            }
+        case ADD_TODOITEM_SUCCESS:
+            console.log(action.payload);
+            const TodoList = state.TodoList.concat(action.payload)
+            return{
+                ...state,
+                TodoList: TodoList
+            }
+        case ADD_TODOITEM_FAILURE:
+            return{
+                ...state,
+                loading: false,
                 error: action.payload
             }
         default: return state
