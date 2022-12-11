@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {fetchTodoList , addTodoItems} from '../redux/TodoListActions'
 import InputTodo from "./inputTodo";
 import EditInput from "./EditInpt"
+import apiRequest from "../redux/TodoListActions";
 
 const TodoListContainer = () => {
 
@@ -20,6 +21,16 @@ const TodoListContainer = () => {
     }
 
     const editTodoItem = (todoItem) => {
+        const update = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(todoItem)
+        }
+        const reqUrl = `http://localhost:3333/TodoList/${todoItem.id}`
+        const result = apiRequest(reqUrl,update).then(dispatch(fetchTodoList()))
+        if (result) console.log(result)
         setIsEditing(false)
         setCurrentTodo({})
     }
@@ -29,8 +40,6 @@ const TodoListContainer = () => {
         setIsEditing(true);
         // set the currentTodo to the todo item that was clicked
         setCurrentTodo({ ...todo });
-        console.log(isEditing);
-        console.log(currentTodo);
       }
 
     return TodoListData.loading ? (
@@ -40,7 +49,7 @@ const TodoListContainer = () => {
     ): (
         <div>
             <h1>TodoList</h1>
-            <ul className="todo-list">
+            <ul className="todo-list" >
                 {TodoListData.TodoList.map(todo => 
                 (!isEditing || currentTodo.id !== todo.id )?(
                     <li key={todo.id}>

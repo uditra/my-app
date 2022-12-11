@@ -8,7 +8,6 @@ const EditTodo = ({editTodo ,todoItem}) => {
     const [todo,setTodo] =useState({title: todoItem.title,date:todoItem.date,flag:todoItem.flag,id:todoItem.id})
 
     const handleSubmit = e => {
-        console.log(todo);
         e.preventDefault()
         if (!todo.title || !todo.date) return
         editTodo(todo)
