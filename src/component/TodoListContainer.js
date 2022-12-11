@@ -4,6 +4,7 @@ import {fetchTodoList , addTodoItems} from '../redux/TodoListActions'
 import InputTodo from "./inputTodo";
 import EditInput from "./EditInpt"
 import apiRequest from "../redux/TodoListActions";
+import Checkbox from '@mui/material/Checkbox';
 
 const TodoListContainer = () => {
 
@@ -36,11 +37,16 @@ const TodoListContainer = () => {
     }
 
     const handleEditClick =(todo) => {
-        // set editing to true
         setIsEditing(true);
-        // set the currentTodo to the todo item that was clicked
         setCurrentTodo({ ...todo });
       }
+
+    const handleDeleteClick =(todo) => {
+        const update = { method: 'DELETE' }
+        const reqUrl = `http://localhost:3333/TodoList/${todo.id}`
+        const result = apiRequest(reqUrl,update).then(dispatch(fetchTodoList()))
+        if (result) console.log(result)
+    }
 
     return TodoListData.loading ? (
         <h1>loading data</h1>
@@ -53,10 +59,9 @@ const TodoListContainer = () => {
                 {TodoListData.TodoList.map(todo => 
                 (!isEditing || currentTodo.id !== todo.id )?(
                     <li key={todo.id}>
-                        <p>task: {todo.title} date: {todo.date} </p>
-                        {/* we are passing the entire todo object to the handleEditClick function*/}
+                        <h3>{todo.title} {todo.date} <Checkbox onClick={() => editTodoItem({...todo,flag: !todo.flag})} color="success" checked={todo.flag}/></h3>
                         <button onClick={() => handleEditClick(todo)}>Edit</button>
-                        <button >Delete</button>
+                        <button onClick={() => handleDeleteClick(todo)}>Delete</button>
                     </li>
                 ):(<EditInput editTodo={editTodoItem} todoItem={todo}/>)
                 )}
