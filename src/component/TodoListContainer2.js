@@ -1,40 +1,24 @@
 import React, {useState, useEffect} from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {fetchTodoListSuccess, fetchTodoListFailure , addTodoItemSuccess, addTodoItemFailure, editItem, deleteItem} from '../redux/TodoListActions'
+import {fetchTodoList , addTodoItems} from '../redux/TodoListActions'
 import InputTodo from "./inputTodo";
 import EditInput from "./EditInpt"
-import apiRequest from "../redux/api";
+import apiRequest from "../redux/TodoListActions";
 import Checkbox from '@mui/material/Checkbox';
-import axios from "axios"
 
-const TodoListContainer = () => {
+const TodoListContainer2 = () => {
 
     const [currentTodo, setCurrentTodo] = useState({});
     const [isEditing, setIsEditing] = useState(false);
     const TodoListData = useSelector(state => state)
     const dispatch = useDispatch()
-    const url ="http://localhost:3333/TodoList"
 
     useEffect(() => {
-        const pull = async () => {
-        try{
-            const response = await axios.get(`${url}`)
-            dispatch(fetchTodoListSuccess(response.data))
-        } catch (err) {
-            dispatch(fetchTodoListFailure(err.massage))
-        } }
-        pull()
+        dispatch(fetchTodoList())
     },[])
 
     const addTodoItem = (todoItem) => {
-        const push = async () => {
-        try{
-            const response = await axios.post(`${url}`,todoItem)
-            dispatch(addTodoItemSuccess(response.data))
-        } catch (err) {
-            dispatch(addTodoItemFailure(err.massage))
-        } }
-        push()
+        dispatch(addTodoItems(todoItem))
     }
 
     const editTodoItem = (todoItem) => {
@@ -45,8 +29,8 @@ const TodoListContainer = () => {
             },
             body: JSON.stringify(todoItem)
         }
-        const reqUrl = `${url}/${todoItem.id}`
-        const result = apiRequest(reqUrl,update).then(dispatch(editItem(todoItem)))
+        const reqUrl = `http://localhost:3333/TodoList/${todoItem.id}`
+        const result = apiRequest(reqUrl,update).then(dispatch(fetchTodoList()))
         if (result) console.log(result)
         setIsEditing(false)
         setCurrentTodo({})
@@ -55,21 +39,17 @@ const TodoListContainer = () => {
     const handleEditClick =(todo) => {
         setIsEditing(true);
         setCurrentTodo({ ...todo });
-    }
+      }
 
     const handleDeleteClick =(todo) => {
         const update = { method: 'DELETE' }
-        const reqUrl = `${url}/${todo.id}`
-        const result = apiRequest(reqUrl,update).then(dispatch(deleteItem(todo)))
+        const reqUrl = `http://localhost:3333/TodoList/${todo.id}`
+        const result = apiRequest(reqUrl,update).then(dispatch(fetchTodoList()))
         if (result) console.log(result)
-
     }
 
     return TodoListData.loading ? (
-        <div>
-            <h1>TodoList</h1>
-            <h1>loading data</h1>
-        </div>
+        <h1>loading data</h1>
     ) : TodoListData.error ? (
         <h1>{TodoListData.error}</h1>
     ): (
@@ -83,11 +63,11 @@ const TodoListContainer = () => {
                         <button onClick={() => handleEditClick(todo)}>Edit</button>
                         <button onClick={() => handleDeleteClick(todo)}>Delete</button>
                     </li>
-                ):(<EditInput key={todo.id} editTodo={editTodoItem} todoItem={todo}/>)
+                ):(<EditInput editTodo={editTodoItem} todoItem={todo}/>)
                 )}
             </ul>
             <InputTodo addTodo={addTodoItem}/>
         </div>
     )
 }
-export default TodoListContainer
+export default TodoListContainer2
